@@ -1,0 +1,13 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Host= localhost;Port= 123;Database= database;user id= user;Password= password;"
+  },
+
+  "AllowedHosts": "*"
+}

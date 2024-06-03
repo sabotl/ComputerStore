@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "API": {
+      "commandName": "Project",
+      "workingDirectory": "E:\\Projects\\ComputerStore\\ComputerStore.API"
+    }
+  }
+}
