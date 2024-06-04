@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace ComputerStore.Domain.Entities
 {
@@ -27,7 +28,9 @@ namespace ComputerStore.Domain.Entities
         [Required, ForeignKey("GoodsCategory"), NotNull]
         public int CategoryID { get; set; }
 
+        [JsonIgnore]
         public GoodsCategory GoodsCategory { get; set; }
+        [JsonIgnore]
         public Shop ProductShop { get; set; }
     }
 }

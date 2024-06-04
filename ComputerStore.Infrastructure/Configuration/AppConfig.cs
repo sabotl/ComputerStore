@@ -37,7 +37,6 @@ namespace ComputerStore.Infrastructure.Configuration
             services.AddScoped<ComputerStore.Domain.Repositories.IProductRepository<Goods>, ComputerStore.Infrastructure.Repository.GoodsRepository>();
 
             services.AddScoped<ComputerStore.Domain.Services.IProductService<Goods>, ComputerStore.Application.Services.GoodsService>();
-            services.AddScoped<ComputerStore.Application.Services.Interfaces.IGoodsAppService<GoodsDTO>, ComputerStore.Application.Services.GoodsAppService>();
 
             services.AddScoped<ComputerStore.Application.UseCase.GoodsUseCase>();
 

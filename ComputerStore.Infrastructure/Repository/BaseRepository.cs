@@ -18,21 +18,12 @@ namespace ComputerStore.Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync<Tid>(Tid id)
         {
             var entry = await _context.Set<T>().FindAsync(id);
             if(entry != null)
             {
                 _context.Set<T>().Remove(entry);
-                await _context.SaveChangesAsync();
-            }
-        }
-        public async Task DeleteAsync(Guid id)
-        {
-            var entiry = await _context.Set<T>().FindAsync(id);
-            if (entiry != null)
-            {
-                _context.Set<T>().Remove(entiry);
                 await _context.SaveChangesAsync();
             }
         }
@@ -42,45 +33,40 @@ namespace ComputerStore.Infrastructure.Repository
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync<Tid>(Tid id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity != null)
                 return entity;
             return null;
-        }
-
-        public async Task<T?> GetByIdAsync(Guid id)
-        {
-            var entity = await _context.Set<T>().FindAsync(id);
-            if (entity != null)
-                return entity;
-            return null;
-        }
-
-        public async Task UpdateAsync(T entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
         }
 
         private async Task AbstractionUpdateAsync<TId>(TId id, T entity)
         {
-            var existingEntity = await _context.Set<T>().FindAsync(id);
+            var existingEntity = await GetByIdAsync(id);
             if (existingEntity == null)
             {
                 throw new KeyNotFoundException($"Entity with ID {id} not found.");
             }
 
-            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+            var entityType = _context.Model.FindEntityType(typeof(T));
+            var propertiesExceptKey = entityType.GetProperties().Where(p => !p.IsPrimaryKey() && !p.IsForeignKey());
+
+            foreach (var property in propertiesExceptKey)
+            {
+                var propertyName = property.Name;
+                var propertyValue = entityType.FindProperty(propertyName)?.GetGetter().GetClrValue(entity);
+                if (propertyValue != null)
+                {
+                    _context.Entry(existingEntity).Property(propertyName).CurrentValue = propertyValue;
+                }
+            }
+
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(int id, T entity)
-        {
-            await AbstractionUpdateAsync(id, entity);
-        }
-        public async Task UpdateAsync(Guid id, T entity)
+
+        public async Task UpdateAsync<Tid>(Tid id, T entity)
         {
             await AbstractionUpdateAsync(id, entity);
         }

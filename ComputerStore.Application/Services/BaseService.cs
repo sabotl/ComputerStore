@@ -40,11 +40,11 @@ namespace ComputerStore.Application.Services
 
         public async Task UpdateAsync(int id, T entity)
         {
-            var existingEntity = await _repository.GetByIdAsync(id);
-            if (existingEntity != null)
-            {
-                await _repository.UpdateAsync(entity);
-            }
+            await _repository.UpdateAsync(id, entity);
+        }
+        public async Task UpdateAsync(Guid id, T entity)
+        {
+            await _repository.UpdateAsync(id, entity);
         }
         protected abstract void MapEntity(T existingEntity, T newEntity);
     }

@@ -16,7 +16,7 @@ namespace ComputerStore.Infrastructure.Repository
             return await _context.Set<Goods>().CountAsync();
         }
 
-        public async Task<IEnumerable<Goods>?> FindAsync(Expression<Func<Goods, bool>> predicate)
+        public async Task<IReadOnlyList<Goods>?> FindAsync(Expression<Func<Goods, bool>> predicate)
         {
             return await _context.Set<Goods>().Where(predicate).ToListAsync();
         }

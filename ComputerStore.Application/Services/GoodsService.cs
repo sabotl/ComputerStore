@@ -19,7 +19,7 @@ namespace ComputerStore.Application.Services
         {
             return await _goodsRepository.CountAsync();
         }
-        public async Task<IEnumerable<Goods>?> FindAsync(Expression<Func<Goods, bool>> predicate)
+        public async Task<IReadOnlyList<Goods>?> FindAsync(Expression<Func<Goods, bool>> predicate)
         {
             return await _goodsRepository.FindAsync(predicate);
         }
