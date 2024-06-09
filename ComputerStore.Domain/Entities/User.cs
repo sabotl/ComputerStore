@@ -26,6 +26,10 @@ namespace ComputerStore.Domain.Entities
         public string Role { get; set; }
         [Required, NotNull]
         public bool IsAnonymous { get; set; }
+        [Required]
+        public string RefreshToken {  get; set; } = string.Empty;
+        [Required, NotNull]
+        public string salt {  get; set; } = string.Empty;
         
 
         public RefreshToken token { get; set; }

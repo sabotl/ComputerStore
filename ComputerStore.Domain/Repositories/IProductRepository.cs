@@ -2,9 +2,9 @@
 
 namespace ComputerStore.Domain.Repositories
 {
-    public interface IProductRepository<T>: IBaseRepository<T> where T : class
+    public interface IProductRepository: IBaseRepository<Entities.Goods>
     {
-        Task<IReadOnlyList<T>?> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyList<Entities.Goods>?> FindAsync(Expression<Func<Entities.Goods, bool>> predicate);
         Task<int> CountAsync();
     }
 }

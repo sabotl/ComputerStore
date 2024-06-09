@@ -5,9 +5,9 @@ namespace ComputerStore.Application.UseCase
 {
     public class GoodsUseCase
     {
-        private readonly IProductService<Goods> _productService;
+        private readonly IProductService _productService;
         private readonly Mappers.GoodsMapper _goodsMapper;
-        public GoodsUseCase(IProductService<Goods> productService, Mappers.GoodsMapper goodsMapper)
+        public GoodsUseCase(IProductService productService, Mappers.GoodsMapper goodsMapper)
         {
             _productService = productService;
             _goodsMapper = goodsMapper;
@@ -32,6 +32,10 @@ namespace ComputerStore.Application.UseCase
         public async Task UpdateProductAsync(int id, DTOs.GoodsDTO goodsDTO)
         {
             await _productService.UpdateAsync(id, _goodsMapper.MapToEntity(goodsDTO));
+        }
+        public async Task DeleteProductAsync(int id)
+        {
+            await _productService.DeleteAsync(id);
         }
     }
 }

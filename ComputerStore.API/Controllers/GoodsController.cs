@@ -21,24 +21,61 @@ namespace ComputerStore.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductByID(int id)
         {
-            return new JsonResult(await _useCase.GetByID(id));
+            try
+            {
+                return new JsonResult(await _useCase.GetByID(id));
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
         [HttpGet("count")]
         public async Task<IActionResult> GetCountProduct()
         {
-            return Ok(await _useCase.GetCountProduct());
+            try
+            {
+                return Ok(await _useCase.GetCountProduct());
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
         [HttpPost("create")]
         public async Task<IActionResult> CreateProduct(ComputerStore.Application.DTOs.GoodsDTO goods)
         {
-            await _useCase.CreateProductAsync(goods);
-            return Ok();
+            try
+            {
+                await _useCase.CreateProductAsync(goods);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct(int idProduct, Application.DTOs.GoodsDTO updatedProductDTO)
         {
-            await _useCase.UpdateProductAsync(idProduct, updatedProductDTO);
-            return Ok();
+            try
+            {
+                await _useCase.UpdateProductAsync(idProduct, updatedProductDTO);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            try
+            {
+                await _useCase.DeleteProductAsync(id);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

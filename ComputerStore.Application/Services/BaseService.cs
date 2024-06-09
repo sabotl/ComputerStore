@@ -46,6 +46,5 @@ namespace ComputerStore.Application.Services
         {
             await _repository.UpdateAsync(id, entity);
         }
-        protected abstract void MapEntity(T existingEntity, T newEntity);
     }
 }

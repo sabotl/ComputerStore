@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace ComputerStore.Infrastructure.Repository
 {
-    public class GoodsRepository : BaseRepository<Goods>, IProductRepository<Goods>
+    public class GoodsRepository : BaseRepository<Goods>, IProductRepository
     {
         public GoodsRepository(Data.AppDbContext context):  base(context) 
         { 

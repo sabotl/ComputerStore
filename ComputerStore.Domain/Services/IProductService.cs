@@ -2,9 +2,9 @@
 
 namespace ComputerStore.Domain.Services
 {
-    public interface IProductService<T>: IBaseService<T> where T : class
+    public interface IProductService: IBaseService<Entities.Goods>
     {
-        Task<IReadOnlyList<T>?> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyList<Entities.Goods>?> FindAsync(Expression<Func<Entities.Goods, bool>> predicate);
         Task<int> CountAsync();
     }
 }

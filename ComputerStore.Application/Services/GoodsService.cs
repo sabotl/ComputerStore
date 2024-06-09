@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 
 namespace ComputerStore.Application.Services
 {
-    public class GoodsService : BaseService<Goods>, IProductService<Domain.Entities.Goods>
+    public class GoodsService : BaseService<Goods>, IProductService
     {
-        private readonly ComputerStore.Domain.Repositories.IProductRepository<Goods> _goodsRepository;
+        private readonly ComputerStore.Domain.Repositories.IProductRepository _goodsRepository;
         private readonly GoodsMapper _goodsMapper;
 
-        public GoodsService(ComputerStore.Domain.Repositories.IProductRepository<Goods> goodsRepository, GoodsMapper goodsMapper): base(goodsRepository)
+        public GoodsService(ComputerStore.Domain.Repositories.IProductRepository goodsRepository, GoodsMapper goodsMapper): base(goodsRepository)
         {
             _goodsMapper = goodsMapper;
             _goodsRepository = goodsRepository;
@@ -23,14 +23,6 @@ namespace ComputerStore.Application.Services
         {
             return await _goodsRepository.FindAsync(predicate);
         }
-        protected override void MapEntity(Goods existingEntity, Goods newEntity)
-        {
-            existingEntity.Productname = newEntity.Productname;
-            existingEntity.Price = newEntity.Price;
-            existingEntity.Description = newEntity.Description;
-            existingEntity.Quantity = newEntity.Quantity;
-            existingEntity.ShopId = newEntity.ShopId;
-            existingEntity.CategoryID = newEntity.CategoryID;
-        }
+
     }
 }
