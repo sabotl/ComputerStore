@@ -1,4 +1,5 @@
 ﻿using ComputerStore.Application.Services;
+using ComputerStore.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,31 +39,65 @@ namespace ComputerStore.Infrastructure.Configuration
 
             services.AddScoped<ComputerStore.Domain.Services.IProductService, ComputerStore.Application.Services.GoodsService>();
             services.AddScoped<ComputerStore.Domain.Services.IUserService, ComputerStore.Application.Services.UserService>();
+            services.AddScoped<IUserService, UserService>(provider =>
+            {
+                return new UserService(
+                    provider.GetRequiredService<ComputerStore.Domain.Repositories.IUserRepostory>(),
+                    provider.GetRequiredService<IAccessTokenService>(),
+                    provider.GetRequiredService<IRefreshTokenService>()
+                );
+            });
+
 
 
             // Регистрация TokenService
-            services.AddScoped<ComputerStore.Application.Services.TokenService>(provider =>
+            services.AddScoped<IAccessTokenService>(provider =>
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
 
                 string secretKey = configuration["JwtSettings:Secret"];
                 string accessTokenExpirationConfig = configuration["JwtSettings:ExpirationInMinutes"];
-                string refreshTokenExpirationConfig = configuration["JwtSettings:RefreshTokenExpirationDays"];
 
-                if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(accessTokenExpirationConfig) || string.IsNullOrEmpty(refreshTokenExpirationConfig))
+                if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(accessTokenExpirationConfig))
                 {
-                    throw new Exception("Missing configuration parameters for TokenService.");
+                    throw new Exception("Missing configuration parameters for AccessTokenService.");
                 }
 
-                if (!TimeSpan.TryParse(accessTokenExpirationConfig, out TimeSpan accessTokenExpiration) ||
-                    !TimeSpan.TryParse(refreshTokenExpirationConfig, out TimeSpan refreshTokenExpiration))
+                if (!int.TryParse(accessTokenExpirationConfig, out int accessTokenExpirationMinutes))
                 {
-                    throw new Exception("Invalid configuration parameters for TokenService.");
+                    throw new Exception("Invalid configuration parameters for AccessTokenService.");
                 }
 
-                return new TokenService(provider.GetRequiredService<ComputerStore.Domain.Repositories.IUserRepostory>(), secretKey, accessTokenExpiration, refreshTokenExpiration);
+                TimeSpan accessTokenExpiration = TimeSpan.FromMinutes(accessTokenExpirationMinutes);
+
+                return new AccessTokenService(secretKey, accessTokenExpiration);
             });
 
+            services.AddScoped<IRefreshTokenService>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+
+                string secretKey = configuration["JwtSettings:Secret"];
+                string refreshTokenExpirationConfig = configuration["JwtSettings:RefreshTokenExpirationDays"];
+
+                if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(refreshTokenExpirationConfig))
+                {
+                    throw new Exception("Missing configuration parameters for RefreshTokenService.");
+                }
+
+                if (!int.TryParse(refreshTokenExpirationConfig, out int refreshTokenExpirationDays))
+                {
+                    throw new Exception("Invalid configuration parameters for RefreshTokenService.");
+                }
+
+                TimeSpan refreshTokenExpiration = TimeSpan.FromDays(refreshTokenExpirationDays);
+
+                return new RefreshTokenService(
+                    provider.GetRequiredService<ComputerStore.Domain.Repositories.IUserRepostory>(),
+                    secretKey,
+                    refreshTokenExpiration
+                );
+            });
 
             services.AddScoped<ComputerStore.Application.UseCase.GoodsUseCase>();
             services.AddScoped<ComputerStore.Application.UseCase.UserUseCase>();
