@@ -9,8 +9,8 @@ namespace ComputerStore.Application.Services
     {
         private readonly TimeSpan _accessTokenExpiration;
 
-        public AccessTokenService(string secretKey, TimeSpan accessTokenExpiration)
-            : base(secretKey)
+        public AccessTokenService(string secretKey, string audience,string issuer, TimeSpan accessTokenExpiration)
+            : base(secretKey, audience, issuer)
         {
             _accessTokenExpiration = accessTokenExpiration;
         }

@@ -56,6 +56,8 @@ namespace ComputerStore.Infrastructure.Configuration
                 var configuration = provider.GetRequiredService<IConfiguration>();
 
                 string secretKey = configuration["JwtSettings:Secret"];
+                string audience = configuration["JwtSettings:Audience"];
+                string issuer = configuration["JwtSettings:Issuer"];
                 string accessTokenExpirationConfig = configuration["JwtSettings:ExpirationInMinutes"];
 
                 if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(accessTokenExpirationConfig))
@@ -70,7 +72,7 @@ namespace ComputerStore.Infrastructure.Configuration
 
                 TimeSpan accessTokenExpiration = TimeSpan.FromMinutes(accessTokenExpirationMinutes);
 
-                return new AccessTokenService(secretKey, accessTokenExpiration);
+                return new AccessTokenService(secretKey, audience, issuer, accessTokenExpiration);
             });
 
             services.AddScoped<IRefreshTokenService>(provider =>
@@ -78,6 +80,8 @@ namespace ComputerStore.Infrastructure.Configuration
                 var configuration = provider.GetRequiredService<IConfiguration>();
 
                 string secretKey = configuration["JwtSettings:Secret"];
+                string audience = configuration["JwtSettings:Audience"];
+                string issuer = configuration["JwtSettings:Issuer"];
                 string refreshTokenExpirationConfig = configuration["JwtSettings:RefreshTokenExpirationDays"];
 
                 if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(refreshTokenExpirationConfig))
@@ -95,6 +99,8 @@ namespace ComputerStore.Infrastructure.Configuration
                 return new RefreshTokenService(
                     provider.GetRequiredService<ComputerStore.Domain.Repositories.IUserRepostory>(),
                     secretKey,
+                    audience,
+                    issuer,
                     refreshTokenExpiration
                 );
             });

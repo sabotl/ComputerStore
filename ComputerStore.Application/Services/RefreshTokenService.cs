@@ -8,8 +8,8 @@ namespace ComputerStore.Application.Services
         private readonly Domain.Repositories.IUserRepostory _userRepostory;
         private readonly TimeSpan _refreshTokenExpiration;
 
-        public RefreshTokenService(Domain.Repositories.IUserRepostory userRepostory, string secretKey, TimeSpan refreshTokenExpiration)
-            : base(secretKey)
+        public RefreshTokenService(Domain.Repositories.IUserRepostory userRepostory, string secretKey,string audience,string issuer, TimeSpan refreshTokenExpiration)
+            : base(secretKey, audience, issuer)
         {
             _userRepostory = userRepostory;
             _refreshTokenExpiration = refreshTokenExpiration;

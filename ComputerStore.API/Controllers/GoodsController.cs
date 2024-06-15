@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerStore.API.Controllers
 {
@@ -12,7 +13,6 @@ namespace ComputerStore.API.Controllers
         {
             _useCase = useCase;
         }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -40,6 +40,7 @@ namespace ComputerStore.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [Authorize(Roles = "manager")]
         [HttpPost("create")]
         public async Task<IActionResult> CreateProduct(ComputerStore.Application.DTOs.GoodsDTO goods)
         {
@@ -53,6 +54,7 @@ namespace ComputerStore.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [Authorize(Roles = "manager")]
         [HttpPut("update")]
         public async Task<IActionResult> UpdateProduct(int idProduct, Application.DTOs.GoodsDTO updatedProductDTO)
         {
@@ -65,6 +67,7 @@ namespace ComputerStore.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [Authorize(Roles = "manager")]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
