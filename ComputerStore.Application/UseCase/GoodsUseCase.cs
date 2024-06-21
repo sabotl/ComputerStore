@@ -12,7 +12,11 @@ namespace ComputerStore.Application.UseCase
             _productService = productService;
             _goodsMapper = goodsMapper;
         }
-
+       /* public async Task<IReadOnlyList<DTOs.GoodsDTO>?> GetProductsByFilter(Expression<Func<DTOs.GoodsDTO, bool>> predicate)
+        {
+            var products = await _productService.FindAsync();
+            return _goodsMapper.ToList(products);
+        }*/
         public async Task CreateProductAsync(ComputerStore.Application.DTOs.GoodsDTO goodsDTO)
         {
             await _productService.AddAsync(_goodsMapper.MapToEntity(goodsDTO));

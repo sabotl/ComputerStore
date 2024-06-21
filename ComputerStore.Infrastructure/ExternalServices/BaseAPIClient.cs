@@ -56,35 +56,23 @@ namespace ComputerStore.Infrastructure.ExternalServices
 
         public async Task<bool> AddAsync(T entity)
         {
-            try
-            {
-                var json = JsonConvert.SerializeObject(entity);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(entity);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync($"{_baseUrl}/{_endpoint}", content);
+            var response = await _httpClient.PostAsync($"{_baseUrl}/{_endpoint}", content);
 
-                return response.IsSuccessStatusCode;
-            }catch(Exception ex)
-            {
-                return false;
-            }
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> UpdateAsync(int id, T entity)
         {
-            try
-            {
-                var json = JsonConvert.SerializeObject(entity);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonConvert.SerializeObject(entity);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PutAsync($"{_baseUrl}/{_endpoint}/{id}", content);
+            var response = await _httpClient.PutAsync($"{_baseUrl}/{_endpoint}/{id}", content);
 
-                return response.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
 
-            }catch(Exception ex)
-            {
-                return false;
-            }
         }
 
         private async Task<bool> DeleteAsync<Unique>(Unique id)

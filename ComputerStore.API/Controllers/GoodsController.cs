@@ -80,5 +80,10 @@ namespace ComputerStore.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("filter")]
+        public async Task<IReadOnlyList<Application.DTOs.GoodsDTO>?> GetByFilter()
+        {
+            return null;
+        }
     }
 }
