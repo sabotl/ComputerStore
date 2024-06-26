@@ -1,46 +1,37 @@
 import React, { useState } from 'react';
-import ApiClient from './Api/ApiClient';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import Login from './pages/Login';
+import SignIn from './pages/SignIn';
+import Product from './pages/Product';
+import Profile from './pages/Profile';
 
-function App() {
-  const [products, setProducts] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const apiClient = new ApiClient('https://localhost:7036/api'); 
+import { AuthProvider } from './Auth/AuthContext';
+import ProtectedRoute from './Auth/ProtectedRoute';
 
-  const fetchProducts = async () => {
-    try {
-      const fetchedProducts = await apiClient.getAllProducts();
-      setProducts(fetchedProducts);
-      setIsLoaded(true);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
+const App = () => {
+    return (
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/product/:id" element={<Product />} />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    );
   };
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={fetchProducts}>Load Products</button> {/* Кнопка для загрузки продуктов */}
-      </header>
-      {isLoaded && ( // Показываем данные только если они загружены
-        <main>
-          <h1>Product List</h1>
-          <ul>
-            {products.map((product) => (
-              <li key={product.id}>
-                {product.productname} - {product.price}руб.
-              </li>
-            ))}
-          </ul>
-        </main>
-      )}
-    </div>
-  );
-}
-
-export default App;
+  
+  export default App;

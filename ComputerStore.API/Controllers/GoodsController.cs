@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ComputerStore.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace ComputerStore.API.Controllers
 {
@@ -81,9 +83,24 @@ namespace ComputerStore.API.Controllers
             }
         }
         [HttpGet("filter")]
-        public async Task<IReadOnlyList<Application.DTOs.GoodsDTO>?> GetByFilter()
+        public async Task<ActionResult<IReadOnlyList<GoodsDTO>>> GetByFilter(string SearchQuery)
         {
-            return null;
+            try{
+                Expression<Func<GoodsDTO, bool>> predicate = CreatePredicate(SearchQuery);
+
+                var result = await _useCase.GetByFilter(predicate);
+                if (result == null)
+                    return NotFound("No goods");
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        private Expression<Func<GoodsDTO, bool>> CreatePredicate(string searchQuery)
+        {
+            return g => g.Productname.Contains(searchQuery) || g.Description.Contains(searchQuery);
         }
     }
 }

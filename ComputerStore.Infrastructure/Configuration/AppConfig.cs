@@ -109,6 +109,7 @@ namespace ComputerStore.Infrastructure.Configuration
             services.AddScoped<ComputerStore.Application.UseCase.UserUseCase>();
 
             services.AddScoped<ComputerStore.Application.Mappers.GoodsMapper>();
+            services.AddScoped<Application.Mappers.UserMapper>();
 
             services.AddScoped(typeof(ComputerStore.Domain.Repositories.IBaseRepository<>), typeof(ComputerStore.Infrastructure.Repository.BaseRepository<>));
         }

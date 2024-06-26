@@ -28,17 +28,12 @@ namespace ComputerStore.Application.Services
             return await _repository.GetAllAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync<Type>(Type id)
         {
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<T?> GetByIdAsync(Guid id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
-
-        public async Task UpdateAsync(int id, T entity)
+        public async Task UpdateAsync<Type>(Type id, T entity)
         {
             await _repository.UpdateAsync(id, entity);
         }

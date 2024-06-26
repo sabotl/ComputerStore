@@ -1,4 +1,7 @@
-﻿namespace ComputerStore.Application.Mappers
+﻿using ComputerStore.Application.DTOs;
+using ComputerStore.Domain.Entities;
+
+namespace ComputerStore.Application.Mappers
 {
     public class GoodsMapper
     {
@@ -6,6 +9,7 @@
         {
             return new DTOs.GoodsDTO
             {
+                Id = goods.id,
                 Productname = goods.Productname,
                 Description = goods.Description,
                 Price = goods.Price,
@@ -18,6 +22,7 @@
         {
             return new ComputerStore.Domain.Entities.Goods
             {
+                id = goodsDTO.Id,
                 Productname = goodsDTO.Productname,
                 Description = goodsDTO.Description,
                 Price = goodsDTO.Price,
@@ -25,6 +30,19 @@
                 Quantity = goodsDTO.Quantity,
                 ShopId = goodsDTO.ShopID
             };
+        }
+        public IReadOnlyList<GoodsDTO> ToList(IReadOnlyList<Goods> goods)
+        {
+            return goods.Select(g => new GoodsDTO
+            {
+                Id = g.id,
+                Productname = g.Productname,
+                Description = g.Description,
+                Price = g.Price,
+                CategoryID = g.CategoryID,
+                Quantity = g.Quantity,
+                ShopID = g.ShopId
+            }).ToList();
         }
     }
 }

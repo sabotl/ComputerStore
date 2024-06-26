@@ -1,5 +1,7 @@
-﻿using ComputerStore.Domain.Entities;
+﻿using ComputerStore.Application.DTOs;
+using ComputerStore.Domain.Entities;
 using ComputerStore.Domain.Services;
+using System.Linq.Expressions;
 
 namespace ComputerStore.Application.UseCase
 {
@@ -12,11 +14,12 @@ namespace ComputerStore.Application.UseCase
             _productService = productService;
             _goodsMapper = goodsMapper;
         }
-       /* public async Task<IReadOnlyList<DTOs.GoodsDTO>?> GetProductsByFilter(Expression<Func<DTOs.GoodsDTO, bool>> predicate)
+        public async Task<IReadOnlyList<GoodsDTO>?> GetByFilter(Expression<Func<GoodsDTO, bool>> predicate)
         {
-            var products = await _productService.FindAsync();
+            var goodsPredicate = Expressions.ExpressionConverter .Convert<GoodsDTO, Goods>(predicate);
+            var products = await _productService.FindAsync(goodsPredicate);
             return _goodsMapper.ToList(products);
-        }*/
+        }
         public async Task CreateProductAsync(ComputerStore.Application.DTOs.GoodsDTO goodsDTO)
         {
             await _productService.AddAsync(_goodsMapper.MapToEntity(goodsDTO));
